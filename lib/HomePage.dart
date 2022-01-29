@@ -157,7 +157,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> {
                 Center(
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pushReplacement(context,
+                      Navigator.push(context,
                           MaterialPageRoute(builder: (context) => Location()));
                     },
                     child: Text('Sign in'),

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:reprise_1/loginPage.dart';
 
-void main() => runApp(const Location());
-
 /// This is the main application widget.
 class Location extends StatelessWidget {
   const Location({Key? key}) : super(key: key);

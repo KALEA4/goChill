@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reprise_1/HomePage.dart';
 
@@ -59,44 +60,45 @@ class _LoginState extends State<Login> {
                 Navigator.pop(context);
               },
               icon: Icon(Icons.arrow_back))),
-      body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(bottom: 45),
-                child: Column(
+      body: Column(
+        children: [
+          Container(
+            padding: EdgeInsets.only(bottom: 30),
+            child: Column(
+              children: [
+                Container(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    Text(
+                      'Sign in',
+                      style: TextStyle(
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xffF2F2F2),
+                      ),
+                    ),
                     Container(
-                        child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Sign in',
-                          style: TextStyle(
-                            fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xffF2F2F2),
-                          ),
+                      padding: EdgeInsets.only(top: 16),
+                      child: Text(
+                        'sign in here to continue the adventure',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Color(0xffF2F2F2),
                         ),
-                        Container(
-                          padding: EdgeInsets.only(top: 16),
-                          child: Text(
-                            'sign in here to continue the adventure',
-                            textAlign: TextAlign.left,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Color(0xffF2F2F2),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
+                      ),
+                    ),
                   ],
-                ),
-              ),
-              Container(
+                )),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.only(
                       topRight: Radius.circular(40),
@@ -105,11 +107,9 @@ class _LoginState extends State<Login> {
                 ),
                 child: Column(
                   children: [
-                    SizedBox(height: 50),
-                    SizedBox(height: 20),
                     Container(
+                      padding: EdgeInsets.only(top: 20),
                       margin: const EdgeInsets.all(10.0),
-                      width: 400,
                       child: Form(
                         key: _formKey,
                         child: Column(
@@ -117,9 +117,19 @@ class _LoginState extends State<Login> {
                           children: [
                             TextFormField(
                               decoration: InputDecoration(
-                                  hintText: "Name",
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(40))),
+                                contentPadding: EdgeInsets.all(20),
+                                filled: true,
+                                fillColor: Color(0xffe5e5e5),
+                                hintText: "Name",
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide: BorderSide(color: Colors.white),
+                                  borderRadius: BorderRadius.circular(40),
+                                ),
+                              ),
                               // The validator receives the text that the user has entered.
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
@@ -132,11 +142,19 @@ class _LoginState extends State<Login> {
                               padding: EdgeInsets.only(top: 20),
                               child: TextFormField(
                                 decoration: InputDecoration(
-                                    hintText: "Password",
-                                    fillColor: Colors.green,
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(40),
-                                    )),
+                                  contentPadding: EdgeInsets.all(20),
+                                  filled: true,
+                                  fillColor: Color(0xffe5e5e5),
+                                  hintText: "Password",
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(40),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(color: Colors.white),
+                                    borderRadius: BorderRadius.circular(40),
+                                  ),
+                                ),
                                 // The validator receives the text that the user has entered.
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
@@ -150,9 +168,9 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 50),
                     Container(
                       padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(top: 30),
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pushReplacement(
@@ -161,7 +179,7 @@ class _LoginState extends State<Login> {
                                   builder: (context) => HomePage()));
                         },
                         child: Center(
-                          child: Text('Sign in'),
+                          child: Text('Sign In'),
                         ),
                         style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.only(top: 20, bottom: 20),
@@ -169,14 +187,12 @@ class _LoginState extends State<Login> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(30.0),
                                 side: BorderSide(color: Color(0xff3C618E))),
-                            primary: Color(0xff3C618E)),
+                            primary: Colors.black),
                       ),
-                    ),
-                    SizedBox(
-                      height: 25,
                     ),
                     Container(
                       padding: EdgeInsets.all(10),
+                      margin: EdgeInsets.only(top: 40),
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.pushReplacement(context,
@@ -221,11 +237,9 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              Column(),
-            ],
-          ),
-        ),
-        //child: _widgetOptions.elementAt(_selectedIndex),
+            ),
+          )
+        ],
       ),
     );
   }
