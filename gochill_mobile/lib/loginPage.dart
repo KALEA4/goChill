@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:reprise_1/pages/home.dart';
+import 'package:reprise_1/services/api_base.dart';
 
 void main() => runApp(const Login());
 
@@ -14,33 +18,31 @@ class Login extends StatefulWidget {
 
 /// This is the private State class that goes with MyStatefulWidget.
 class _LoginState extends State<Login> {
-  int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    Text(
-      'Urnice',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController errorController = TextEditingController();
+  String error="";
+
+  bool isLoading = false;
+  bool isLoad =false;
+  bool isError = true;
+
 
   @override
+  void initState() {
+    // TODO: implement initState
+    setState(() {
+      isError = false;
+    });
+    super.initState();
+  }
   final _formKey = GlobalKey<FormState>();
   Widget build(BuildContext context) {
+
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: Color(0xFFD8774C),
       appBar: AppBar(
@@ -130,10 +132,13 @@ class _LoginState extends State<Login> {
                                   borderRadius: BorderRadius.circular(40),
                                 ),
                               ),
+                              controller: emailController,
+                              keyboardType: TextInputType.emailAddress,
                               // The validator receives the text that the user has entered.
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
+                                  this.error = "Veuillez entrer votre email";
+                                  return this.error;
                                 }
                                 return null;
                               },
@@ -155,10 +160,13 @@ class _LoginState extends State<Login> {
                                     borderRadius: BorderRadius.circular(40),
                                   ),
                                 ),
+                                controller: passwordController,
+                                obscureText: true,
                                 // The validator receives the text that the user has entered.
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return 'Please enter some text';
+                                    this.error = "Veuillez entrer votre mot de passe";
+                                    return this.error;
                                   }
                                   return null;
                                 },
@@ -172,14 +180,176 @@ class _LoginState extends State<Login> {
                       padding: EdgeInsets.all(10),
                       margin: EdgeInsets.only(top: 30),
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => HomePage()));
+                        onPressed: isLoad ? (){}: () async {
+                          ApiBase _apiBase = ApiBase();
+                          if ((_formKey.currentState?.validate() ?? false)) {
+                            try {
+                              final result = await InternetAddress.lookup('google.com');
+                              if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+                                setState(() {this.isLoad = true;});
+                                //await signIn(emailController.text,passwordController.text);
+                                Map<String, dynamic> response = await _apiBase.post('login', data: jsonEncode({
+                                  'email': emailController.text,
+                                  'password': passwordController.text,
+                                }),
+                                    onError: (response) {
+                                      setState(() {
+                                        this.isError = true;
+                                        this.isLoad = false;
+                                        emailController.text = '';
+                                        passwordController.text = '';
+                                        showDialog(context: context, builder: (context) => AlertDialog(
+                                          content:
+                                          Container(
+                                            padding:
+                                            EdgeInsets.all(
+                                                12),
+                                            height:
+                                            size.height *
+                                                0.3,
+                                            child:
+                                            Column(
+                                              children: [
+                                                Icon(
+                                                  Icons
+                                                      .error,
+                                                  color:
+                                                  Colors.red,
+                                                  size: size.height *
+                                                      0.1,
+                                                ),
+                                                SizedBox(
+                                                  height:
+                                                  size.height * 0.05,
+                                                ),
+                                                Text(
+                                                  response[
+                                                  'message'],
+                                                  style: TextStyle(
+                                                    fontSize: 15,
+                                                      fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  height:
+                                                  20,
+                                                ),
+                                                Container(
+                                                  width:
+                                                  size.width * 0.5,
+                                                  decoration: BoxDecoration(
+                                                      color: Color(0xff3C618E),
+                                                      borderRadius: BorderRadius.circular(10)),
+                                                  child:
+                                                  ElevatedButton(
+                                                    onPressed:
+                                                        () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child:
+                                                    Text(
+                                                      "Ok",
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                        fontWeight: FontWeight.bold,
+                                                        color: Colors.white
+                                                      ),
+                                                    ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ));
+                                      });
+                                    });
+                                setState(() {
+                                  this.isError=false;
+                                });
+                                if (response['status'] == 'success') {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage()));
+                                } else {
+                                  setState(() {this.isLoad = false;});
+                                  showDialog(context: context, builder: (context) => AlertDialog(
+                                    content:
+                                    Container(
+                                      padding:
+                                      EdgeInsets.all(
+                                          12),
+                                      height:
+                                      size.height *
+                                          0.3,
+                                      child:
+                                      Column(
+                                        children: [
+                                          Icon(
+                                            Icons
+                                                .error,
+                                            color:
+                                            Colors.red,
+                                            size: size.height *
+                                                0.1,
+                                          ),
+                                          SizedBox(
+                                            height:
+                                            size.height * 0.05,
+                                          ),
+                                          Text(
+                                            response[
+                                            'message'],
+                                            style: TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height:
+                                            15,
+                                          ),
+                                          Container(
+                                            width: size.width * 0.5,
+                                            child:
+                                            ElevatedButton(
+                                              onPressed:
+                                                  () {
+                                                Navigator.pop(context);
+                                              },
+                                              style:ButtonStyle(
+                                                foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                                                backgroundColor: MaterialStateProperty.all<Color>(Color(0xff3C618E)),
+                                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                                    RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.circular(10),
+                                                        side: BorderSide(color: Color(0xff3C618E))
+                                                    )
+                                                )),
+                                              child:
+                                              Text(
+                                                "Ok",
+                                                style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ));
+                                }
+                              }
+                            } on SocketException catch (e) {
+                              setState(() {this.errorController.text = "Verifiez votre connexion. Réessayer";});
+                            }
+                          }
                         },
                         child: Center(
-                          child: Text('Sign In'),
+                          child: isLoad ? CircularProgressIndicator():Text('Sign In'),
                         ),
                         style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.only(top: 20, bottom: 20),

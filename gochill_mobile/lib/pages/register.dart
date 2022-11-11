@@ -44,6 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       height: 20,
                     ),
                     DropdownButtonFormField(
+                      onChanged: (event){},
                       decoration: InputDecoration(
                           filled: true,
                           fillColor: Color(0x56fcfdfd),
