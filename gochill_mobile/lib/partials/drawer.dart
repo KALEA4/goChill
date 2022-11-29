@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:reprise_1/pages/tips.dart';
+import 'package:reprise_1/src/screen/home.dart';
 
   class MyDrawer extends StatelessWidget {
   @override
@@ -79,6 +80,18 @@ import 'package:reprise_1/pages/tips.dart';
                           fontSize: 14,
                           color: Colors.black87
                       ),),
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.payment,color: Colors.black87,),
+                      title: InkWell(
+                        onTap: (){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+                        },
+                        child: Text('Payement',style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black87
+                        ),),
+                      )
                     ),
                     ListTile(
                       leading: Icon(Icons.settings,color: Colors.black87,),

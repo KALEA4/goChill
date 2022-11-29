@@ -5,12 +5,9 @@ class Environment {
   static const String adresseIpProduction ='';
   static const String portProduction ='8000';
   static  String BASE_URL='http://'+adresseIp+':'+port+'/api/';
+  //static  String BASE_URL='https://srvparcauto.pac.bj/parcauto/service/public/api';
   static const int timeout = 20;
   static const bool isProduction = false;
-  static const String statutCree = "CREEE";
-  static const String statutAffectee = "AFFECTEE";
-  static const String statutDemarre = "DEMARREE";
-  static const String statutTerminee = "TERMINEE";
 
   static String getAdresseIp(){
     String base_Url_Oauth;

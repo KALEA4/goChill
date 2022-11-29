@@ -344,7 +344,7 @@ class _LoginState extends State<Login> {
                                 }
                               }
                             } on SocketException catch (e) {
-                              setState(() {this.errorController.text = "Verifiez votre connexion. Réessayer";});
+                              setState(() {this.errorController.text = "Kindly check your network and try again";});
                             }
                           }
                         },
